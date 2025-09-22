@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Registration Portal</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+
+  <!-- Payment Section -->
+  <div id="payment-section">
+    <h2>Pay and Continue</h2>
+    <button id="payBtn">Pay Now</button>
+  </div>
+
+  <!-- Pay Slip Section -->
+  <div id="payslip-section" style="display:none;">
+    <h2>Pay Slip</h2>
+    <p>Payment Successful!</p>
+    <button onclick="printPaySlip()">Print Pay Slip</button>
+    <button onclick="showForm()">Continue to Registration</button>
+  </div>
+
+  <!-- Student Registration Form -->
+  <div id="form-section" style="display:none;">
+    <h2>Student Registration Form</h2>
+    <form id="studentForm" method="post" enctype="multipart/form-data">
+      <label>Full Name:</label>
+      <input type="text" name="fullname" required><br>
+
+      <label>Father's Name:</label>
+      <input type="text" name="fathername" required><br>
+
+      <label>Village Name:</label>
+      <input type="text" name="village" required><br>
+
+      <label>Phone No:</label>
+      <input type="tel" name="phone" required><br>
+
+      <label>Class:</label>
+      <select name="class" required>
+        <option value="">Select Class</option>
+        <option value="1">Class 1</option>
+        <option value="2">Class 2</option>
+        <option value="3">Class 3</option>
+        <option value="4">Class 4</option>
+        <option value="5">Class 5</option>
+        <option value="6">Class 6</option>
+        <option value="7">Class 7</option>
+        <option value="8">Class 8</option>
+      </select><br>
+
+      <label>Passport Photo:</label>
+      <input type="file" name="photo" accept="image/*" required><br>
+
+      <label>Signature:</label>
+      <input type="file" name="signature" accept="image/*" required><br>
+
+      <button type="submit">Submit</button>
+      <button type="button" onclick="downloadForm()">Download Form</button>
+      <button type="button" onclick="printForm()">Print Form</button>
+    </form>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

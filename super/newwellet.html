@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Portal</title>
+<style>
+  /* Basic reset */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+
+  body {
+    display: flex;
+    min-height: 100vh;
+    background: #f4f4f4;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    background: #1f2937;
+    color: #fff;
+    flex-shrink: 0;
+    transition: width 0.3s;
+    overflow-y: auto;
+  }
+
+  .sidebar.collapsed {
+    width: 60px;
+  }
+
+  .sidebar h2 {
+    text-align: center;
+    padding: 20px 10px;
+    background: #111827;
+  }
+
+  .sidebar ul {
+    list-style: none;
+  }
+
+  .sidebar ul li {
+    padding: 15px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #2c2f38;
+  }
+
+  .sidebar ul li:hover {
+    background: #374151;
+  }
+
+  .sidebar ul li .submenu {
+    display: none;
+    list-style: none;
+    padding-left: 20px;
+  }
+
+  .sidebar ul li.active .submenu {
+    display: block;
+  }
+
+  /* Main content */
+  .main-content {
+    flex: 1;
+    padding: 20px;
+  }
+
+  /* Top scrolling text */
+  .top-scroll {
+    background: #2563eb;
+    color: white;
+    padding: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .top-scroll p {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scrollText 15s linear infinite;
+  }
+
+  @keyframes scrollText {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  /* Board/page sections */
+  .board {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+
+  .wallet {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .wallet div {
+    background: #3b82f6;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    flex: 1;
+    margin-right: 10px;
+    text-align: center;
+  }
+
+  .wallet div:last-child {
+    margin-right: 0;
+  }
+
+  .add-money {
+    margin-top: 10px;
+    display: inline-block;
+    padding: 10px 15px;
+    background: #10b981;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>Dashboard</h2>
+  <ul>
+    <li>Wallet
+      <ul class="submenu">
+        <li>Wallet Balance</li>
+        <li>Add Money</li>
+        <li>Wallet History</li>
+      </ul>
+    </li>
+    <li>Services
+      <ul class="submenu">
+        <li>Birth Certificate</li>
+        <li>Original Birth Certificate</li>
+        <li>Adhar Manual</li>
+        <li>Learning Licence</li>
+        <li>PUC Certificate</li>
+        <li>Land Seeding</li>
+      </ul>
+    </li>
+    <li>API Services
+      <ul class="submenu">
+        <li>Adhar Finger</li>
+        <li>Adhar Find</li>
+        <li>New PAN Apply</li>
+        <li>PAN Find</li>
+        <li>Bike Challan</li>
+        <li>Voter Card</li>
+        <li>Ration Card</li>
+        <li>Ayushman Card</li>
+        <li>DL Services</li>
+        <li>RC Owner Book</li>
+      </ul>
+    </li>
+    <li>Website
+      <ul class="submenu">
+        <li>News</li>
+      </ul>
+    </li>
+    <li>Profile
+      <ul class="submenu">
+        <li>View Profile</li>
+        <li>Edit Profile</li>
+        <li>Logout</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<div class="main-content">
+  <div class="top-scroll">
+    <p>Welcome to your Dashboard! All services available here. Please check your wallet balance before using any services. Stay updated with latest news!</p>
+  </div>
+
+  <div class="board">
+    <h3>Wallet</h3>
+    <div class="wallet">
+      <div>
+        <h4>Your Balance</h4>
+        <p>₹ 500</p>
+      </div>
+      <div>
+        <h4>Your Name</h4>
+        <p>SARAT GOND</p>
+        <a href="#" class="add-money">Add Money</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="board">
+    <h3>Services Charges</h3>
+    <ul>
+      <li>Birth Certificate - ₹50</li>
+      <li>Original Birth Certificate - ₹100</li>
+      <li>Adhar Manual - ₹20</li>
+      <li>Learning Licence - ₹200</li>
+      <li>PUC Certificate - ₹30</li>
+      <li>Land Seeding - ₹150</li>
+      <li>New PAN Apply - ₹50</li>
+      <li>PAN Find - ₹20</li>
+      <li>Bike Challan - ₹10</li>
+      <li>Voter Card - ₹50</li>
+      <li>Ration Card - ₹30</li>
+      <li>Ayushman Card - ₹25</li>
+      <li>DL Services - ₹100</li>
+      <li>RC Owner Book - ₹50</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  // Sidebar toggle submenu
+  const sidebarItems = document.querySelectorAll('.sidebar ul li');
+  sidebarItems.forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('active');
+    });
+  });
+</script>
+
+</body>
+</html>

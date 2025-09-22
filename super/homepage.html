@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Animated Sidebar Navigation — Marriage/Register/Portal</title>
+  <style>
+    /* Reset & base */
+    :root{
+      --accent: #00b4d8;
+      --bg1: #0f172a;
+      --bg2: #071029;
+      --card: rgba(255,255,255,0.04);
+      --glass: rgba(255,255,255,0.06);
+      --text: #e6eef8;
+      --muted: #9fb4c8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body,#app{height:100%}
+    body{
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(0,180,216,0.12), transparent),
+                  radial-gradient(900px 500px at 90% 90%, rgba(0,112,192,0.08), transparent),
+                  linear-gradient(120deg,var(--bg1), var(--bg2));
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:24px;
+    }
+
+    /* Animated background lines */
+    .bg-lines{
+      position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.18;
+      background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 40px);
+      animation: slideLines 20s linear infinite;
+      mix-blend-mode:overlay;
+    }
+    @keyframes slideLines{ from{background-position:0 0} to{background-position:1000px 0} }
+
+    /* Layout */
+    .wrap{position:relative;z-index:2;display:flex;gap:24px;align-items:stretch;max-width:1200px;margin:0 auto}
+
+    /* Sidebar */
+    .sidebar{
+      width:320px;min-width:260px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius:14px;padding:18px;backdrop-filter:blur(6px);box-shadow:0 8px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.04);
+      transform-origin:left center;transition:width .32s ease;
+    }
+
+    /* Toggle hamburger */
+    .toggle{
+      display:flex;align-items:center;gap:12px;margin-bottom:14px;cursor:pointer;user-select:none
+    }
+    .hamburger{width:46px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--glass);position:relative}
+    .hamburger .bar{width:20px;height:2px;background:var(--text);display:block;position:relative;transition:transform .28s ease,opacity .2s ease}
+    .hamburger .bar::before,.hamburger .bar::after{content:"";position:absolute;left:0;right:0;height:2px;background:inherit;transition:transform .28s ease}
+    .hamburger .bar::before{top:-7px}
+    .hamburger .bar::after{top:7px}
+
+    /* When sidebar is collapsed (small screen or manually toggled) */
+    .sidebar.collapsed{width:80px}
+    .sidebar.collapsed .label{display:none}
+    .sidebar.collapsed nav a .txt{display:none}
+    .sidebar.collapsed nav a{justify-content:center}
+    .sidebar.collapsed .leader-card{padding-left:0;padding-right:0}
+
+    /* Animated transform for hamburger when active */
+    .hamburger.active .bar{transform:scaleX(0)}
+    .hamburger.active .bar::before{transform:rotate(45deg) translate(4px,4px)}
+    .hamburger.active .bar::after{transform:rotate(-45deg) translate(4px,-4px)}
+
+    .label{font-weight:600;letter-spacing:.2px}
+    .sub{font-size:12px;color:var(--muted);margin-top:4px}
+
+    nav{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+    nav a{
+      display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;text-decoration:none;color:var(--text);background:transparent;transition:background .18s ease,transform .15s ease;
+    }
+    nav a:hover{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));transform:translateX(6px)}
+    nav a.active{background:linear-gradient(90deg, rgba(0,180,216,0.14), rgba(0,180,216,0.06));box-shadow:inset 0 0 20px rgba(0,180,216,0.03)}
+    nav a .ico{width:36px;height:36px;display:grid;place-items:center;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));}
+    nav a .txt{font-weight:600}
+
+    /* Main content */
+    .main{
+      flex:1;min-height:520px;padding:22px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 10px 40px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.04);
+      position:relative;overflow:hidden
+    }
+
+    /* A decorative border/page frame for register/marriage card pages */
+    .page-frame{
+      border:6px double rgba(0,180,216,0.06);padding:18px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.008), transparent);
+    }
+
+    /* Leader card in middle */
+    .leader-card{display:flex;gap:18px;align-items:flex-start;padding:18px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.008));border:1px solid rgba(255,255,255,0.02)}
+    .leader-avatar{width:130px;height:130px;border-radius:12px;flex-shrink:0;background-size:cover;background-position:center;border:4px solid rgba(255,255,255,0.03)}
+    .leader-body{flex:1}
+    .leader-body h2{font-size:20px;margin-bottom:6px}
+    .leader-body .meta{font-size:13px;color:var(--muted);margin-bottom:10px}
+    .leader-body p{line-height:1.5;color:rgba(230,238,248,0.9)}
+
+    /* Action buttons */
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn{padding:9px 12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.06);text-decoration:none;color:var(--text);font-weight:600}
+    .btn:hover{transform:translateY(-3px)}
+    .btn.primary{background:linear-gradient(90deg,var(--accent), #0077b6);border:none}
+
+    /* Responsive */
+    @media (max-width:880px){
+      .wrap{flex-direction:column}
+      .sidebar{width:100%}
+      .sidebar.collapsed{width:100%}
+    }
+
+    /* Small detail: animated link underline */
+    a.site-link{position:relative}
+    a.site-link::after{content:"";position:absolute;left:0;right:0;height:2px;background:var(--accent);bottom:-4px;transform:scaleX(0);transform-origin:left;transition:transform .24s ease}
+    a.site-link:hover::after{transform:scaleX(1)}
+  </style>
+</head>
+<body>
+  <div class="bg-lines" aria-hidden="true"></div>
+
+  <div id="app" class="wrap">
+    <aside class="sidebar" id="sidebar">
+      <div class="toggle" role="button" tabindex="0" id="toggleBtn" aria-pressed="false">
+        <div class="hamburger" id="hamburger" aria-hidden="true"><span class="bar"></span></div>
+        <div>
+          <div class="label">Portal Dashboard</div>
+          <div class="sub">Marriage • Register • Jobs • Media</div>
+        </div>
+      </div>
+
+      <nav aria-label="Main navigation">
+        <a href="#home" class="active"><span class="ico">🏠</span><span class="txt">Home</span></a>
+        <a href="#register"><span class="ico">📝</span><span class="txt">Register</span></a>
+        <a href="#marriage"><span class="ico">💑</span><span class="txt">Marriage Card</span></a>
+        <a href="#about"><span class="ico">ℹ️</span><span class="txt">About</span></a>
+        <a href="#contact"><span class="ico">📞</span><span class="txt">Contact</span></a>
+        <a href="#whatsapp"><span class="ico">💬</span><span class="txt">WhatsApp Group</span></a>
+        <a href="#youtube"><span class="ico">▶️</span><span class="txt">YouTube</span></a>
+        <a href="#govtjob"><span class="ico">🏛️</span><span class="txt">Govt Job</span></a>
+        <a href="#cmkissan"><span class="ico">🌾</span><span class="txt">CMKissan</span></a>
+        <a href="#subhadra"><span class="ico">📊</span><span class="txt">Subhadra Status</span></a>
+      </nav>
+
+      <div style="margin-top:14px;font-size:12px;color:var(--muted);">Tip: Click the box to collapse the sidebar.</div>
+    </aside>
+
+    <main class="main" id="main">
+      <div class="page-frame">
+        <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div>
+            <h1 style="font-size:20px;margin-bottom:6px">Welcome to the Portal</h1>
+            <div style="color:var(--muted);font-size:13px">Choose a section from the left — or use the quick buttons below.</div>
+          </div>
+          <div>
+            <a class="btn site-link" href="#all" style="margin-right:8px">Open All Sites</a>
+            <a class="btn primary" href="#register">Register</a>
+          </div>
+        </header>
+
+        <!-- Middle leader card -->
+        <section class="leader-card" aria-labelledby="leader-name">
+          <div class="leader-avatar" id="leaderAvatar" style="background-image:url('https://via.placeholder.com/260x260.png?text=Leader')"></div>
+          <div class="leader-body">
+            <h2 id="leader-name">Leader Name</h2>
+            <div class="meta">Village • Leader Title</div>
+            <p>
+              This is a short story/biography of the leader. You can replace this text with a longer biography describing his achievements, history, and important dates. The layout will expand gracefully.
+            </p>
+
+            <div class="btns">
+              <a class="btn" href="#profile">View Profile</a>
+              <a class="btn" href="#story">Read Story</a>
+              <a class="btn" href="#gallery">Gallery</a>
+              <a class="btn primary" href="#contact">Contact</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick cards for specific pages like marriage card, register etc -->
+        <section style="margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+          <article style="padding:12px;border-radius:10px;background:var(--card);border:1px solid rgba(255,255,255,0.02)">
+            <h3 style="margin-bottom:6px">Marriage Card</h3>
+            <p style="font-size:13px;color:var(--muted);">Create and download a printable marriage card with details in Odia and English.</p>
+            <div style="margin-top:10px"><a class="btn" href="#marriage">Open</a></div>
+          </article>
+
+          <article style="padding:12px;border-radius:10px;background:var(--card);border:1px solid rgba(255,255,255,0.02)">
+            <h3 style="margin-bottom:6px">Register</h3>
+            <p style="font-size:13px;color:var(--muted);">Fill the registration form — includes fields for village, family names, dates, Odia text link and file uploads.</p>
+            <div style="margin-top:10px"><a class="btn" href="#register">Open</a></div>
+          </article>
+
+          <article style="padding:12px;border-radius:10px;background:var(--card);border:1px solid rgba(255,255,255,0.02)">
+            <h3 style="margin-bottom:6px">Govt Jobs & Schemes</h3>
+            <p style="font-size:13px;color:var(--muted);">Quick links to CMKissan, Subhadra status, and govt job portals.</p>
+            <div style="margin-top:10px"><a class="btn" href="#govtjob">Open</a></div>
+          </article>
+        </section>
+
+        <footer style="margin-top:18px;color:var(--muted);font-size:13px">Built with HTML & CSS — replace links and images with real targets. </footer>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Toggle behavior for the sidebar hamburger
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const hamburger = document.getElementById('hamburger');
+    const main = document.getElementById('main');
+
+    toggleBtn.addEventListener('click', () => {
+      const collapsed = sidebar.classList.toggle('collapsed');
+      hamburger.classList.toggle('active', collapsed);
+      toggleBtn.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
+    });
+
+    // Simple anchor navigation demo (highlight active)
+    document.querySelectorAll('nav a').forEach(a => {
+      a.addEventListener('click', (e) => {
+        document.querySelectorAll('nav a').forEach(x => x.classList.remove('active'));
+        a.classList.add('active');
+      })
+    });
+
+    // Small: keyboard toggle support
+    toggleBtn.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleBtn.click(); } });
+  </script>
+</body>
+</html>

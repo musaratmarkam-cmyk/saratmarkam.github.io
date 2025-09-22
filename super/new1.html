@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leader Page</title>
+  <style>
+    /* Background Animation */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+      background: linear-gradient(270deg, #ff9966, #ff5e62, #00c6ff, #0072ff);
+      background-size: 800% 800%;
+      animation: gradientBG 15s ease infinite;
+      color: white;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: rgba(0,0,0,0.9);
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+      z-index: 1;
+    }
+
+    .sidebar a {
+      padding: 12px 24px;
+      text-decoration: none;
+      font-size: 20px;
+      color: white;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      background: #575757;
+    }
+
+    .sidebar .closebtn {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 36px;
+    }
+
+    /* Open Sidebar Button */
+    .openbtn {
+      font-size: 20px;
+      cursor: pointer;
+      background: black;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 2;
+      border-radius: 5px;
+    }
+
+    /* Main Content */
+    .main {
+      margin: 100px auto;
+      max-width: 800px;
+      text-align: center;
+    }
+
+    .leader-photo {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 5px solid white;
+      margin-bottom: 20px;
+    }
+
+    .history {
+      font-size: 18px;
+      line-height: 1.6;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Services</a>
+  </div>
+
+  <!-- Open Button -->
+  <button class="openbtn" onclick="openNav()">☰ Menu</button>
+
+  <!-- Main Content -->
+  <div class="main">
+    <img src="https://via.placeholder.com/200" alt="Leader Photo" class="leader-photo">
+    <h2>Leader Name</h2>
+    <div class="history">
+      <p>
+        This is the history of the leader. You can add more details here 
+        about achievements, contributions, and personal life. 
+        The content is styled for readability on an animated background.
+      </p>
+    </div>
+  </div>
+
+  <!-- Sidebar Script -->
+  <script>
+    function openNav() {
+      document.getElementById("mySidebar").style.width = "250px";
+    }
+    function closeNav() {
+      document.getElementById("mySidebar").style.width = "0";
+    }
+  </script>
+
+</body>
+</html>

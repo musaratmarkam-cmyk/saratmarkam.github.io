@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Orange Sidebar Navigation — Template</title>
+  <style>
+    :root{
+      --orange:#ff7a18; /* main orange */
+      --orange-2:#ff9a3c;
+      --dark:#1f1f1f;
+      --muted:#666;
+      --card-bg:rgba(255,255,255,0.95);
+      --glass: rgba(255,255,255,0.08);
+      --accent: #ffb56b;
+      --nav-width:72px;
+      --nav-width-open:240px;
+      --radius:12px;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+
+    /* page layout */
+    html,body{height:100%;margin:0}
+    body{
+      background: linear-gradient(180deg,var(--orange) 0%, var(--orange-2) 100%);
+      display:flex;align-items:stretch;font-size:16px;color:var(--dark);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* sidebar */
+    .sidebar{
+      width:var(--nav-width);background:linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      border-right:1px solid rgba(255,255,255,0.12);backdrop-filter: blur(6px);
+      transition:width 360ms cubic-bezier(.2,.9,.2,1);overflow:hidden;position:relative;box-shadow:0 6px 18px rgba(0,0,0,0.08);
+    }
+    .sidebar.open{width:var(--nav-width-open)}
+
+    .brand{height:72px;display:flex;align-items:center;gap:12px;padding:14px}
+    .logo{
+      width:44px;height:44px;border-radius:10px;background:linear-gradient(45deg,#fff6ea, #fff);
+      display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--orange);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    .brand h1{font-size:14px;margin:0;color:white;opacity:0.95}
+
+    /* toggle */
+    .toggle{
+      position:absolute;right:-18px;top:16px;width:36px;height:36px;background:var(--card-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.12);
+      transition:transform 240ms ease;
+    }
+    .toggle:active{transform:scale(.98)}
+
+    /* hamburger lines */
+    .hamburger{width:18px;height:14px;position:relative}
+    .hamburger span{position:absolute;left:0;right:0;height:2px;background:var(--orange);display:block;border-radius:2px;transition:all 260ms cubic-bezier(.2,.9,.2,1)}
+    .hamburger span:nth-child(1){top:0}
+    .hamburger span:nth-child(2){top:6px}
+    .hamburger span:nth-child(3){bottom:0}
+    .sidebar.open .hamburger span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+    .sidebar.open .hamburger span:nth-child(2){opacity:0}
+    .sidebar.open .hamburger span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+    /* nav list */
+    nav{padding:8px 6px 24px}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;margin:6px;cursor:pointer;color:white;text-decoration:none;transition:background 180ms, transform 180ms}
+    .nav-item:hover{background:rgba(255,255,255,0.06);transform:translateX(6px)}
+    .nav-icon{width:44px;height:44;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.06), rgba(255,255,255,0.03));display:flex;align-items:center;justify-content:center;font-weight:700}
+    .nav-label{white-space:nowrap;opacity:0;transform:translateX(-6px);transition:opacity 240ms, transform 240ms;color:#fff}
+    .sidebar.open .nav-label{opacity:1;transform:translateX(0)}
+
+    /* separator line */
+    .sep{height:1px;background:linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);margin:12px 8px;border-radius:2px}
+
+    /* main area */
+    .main{flex:1;padding:28px;overflow:auto}
+    .container{max-width:1100px;margin:0 auto}
+
+    /* header */
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    .search{background:var(--card-bg);border-radius:999px;padding:8px 12px;display:flex;align-items:center;gap:8px;min-width:220px}
+    .search input{border:0;background:transparent;outline:none;font-size:14px}
+
+    /* grid */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    @media (max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}}
+
+    /* card style */
+    .card{background:var(--card-bg);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06);border:1px solid rgba(0,0,0,0.04)}
+    .card .title{font-weight:700;margin-bottom:8px}
+    .card p{margin:0;color:var(--muted);font-size:14px}
+
+    /* bordered special cards (register, marriage...) */
+    .bordered{border:3px dashed rgba(255,255,255,0.18);background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));}
+    .cta{margin-top:12px;display:inline-block;padding:8px 12px;border-radius:8px;background:linear-gradient(90deg,var(--orange), var(--accent));color:white;text-decoration:none;font-weight:600}
+
+    /* leader card in middle */
+    .leader-wrap{display:flex;gap:18px;align-items:flex-start}
+    .leader-photo{width:160px;height:160px;border-radius:12px;flex:0 0 160px;background-image:url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80');background-size:cover;background-position:center;border:6px solid #fff;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,0.12)}
+    .leader-content{flex:1}
+    .leader-content h2{margin:0 0 6px 0}
+    .leader-content .meta{color:var(--muted);font-size:13px;margin-bottom:10px}
+    .story{background:var(--glass);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06)}
+
+    /* footer small */
+    footer{margin-top:18px;color:rgba(0,0,0,0.5);font-size:13px;text-align:center}
+
+  </style>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="logo">OG</div>
+      <h1 class="brand-text">Orange Grid</h1>
+    </div>
+
+    <div class="toggle" id="toggle" title="Open/close menu">
+      <div class="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <nav>
+      <a class="nav-item" href="#register"><div class="nav-icon">R</div><div class="nav-label">Register</div></a>
+      <a class="nav-item" href="#marriage"><div class="nav-icon">M</div><div class="nav-label">Marriage Card</div></a>
+      <a class="nav-item" href="#whatsapp"><div class="nav-icon">W</div><div class="nav-label">WhatsApp Group</div></a>
+      <a class="nav-item" href="#youtube"><div class="nav-icon">Y</div><div class="nav-label">YouTube</div></a>
+      <a class="nav-item" href="#govt"><div class="nav-icon">G</div><div class="nav-label">Govt Jobs</div></a>
+      <div class="sep"></div>
+      <a class="nav-item" href="#cmkissan"><div class="nav-icon">C</div><div class="nav-label">CM Kissan</div></a>
+      <a class="nav-item" href="#subhadra"><div class="nav-icon">S</div><div class="nav-label">Subhadra Status</div></a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="container">
+      <header>
+        <div>
+          <h3 style="margin:0 0 6px 0;color:white">Welcome — Dashboard</h3>
+          <small style="color:rgba(255,255,255,0.95)">Quick links and info</small>
+        </div>
+        <div class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M21 21l-4.35-4.35" stroke="rgba(0,0,0,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input placeholder="Search..." />
+        </div>
+      </header>
+
+      <section class="grid">
+        <div id="register" class="card bordered">
+          <div class="title">Register</div>
+          <p>Fill the registration form. This card has a bold dashed border style to stand out for printable forms.</p>
+          <a class="cta" href="#">Open Form</a>
+        </div>
+
+        <div id="marriage" class="card bordered">
+          <div class="title">Marriage Card</div>
+          <p>Design area for marriage invitation card — include guest name, mandap time, arrival time and other details.</p>
+          <a class="cta" href="#">Edit Card</a>
+        </div>
+
+        <div id="whatsapp" class="card bordered">
+          <div class="title">WhatsApp Group</div>
+          <p>Share group link or QR to invite members (place group image below).</p>
+          <a class="cta" href="#">Share Group</a>
+        </div>
+
+        <div id="youtube" class="card">
+          <div class="title">YouTube</div>
+          <p>Link to your channel and list of videos or playlists for tutorials, ceremonies and more.</p>
+          <a class="cta" href="#">Open Channel</a>
+        </div>
+
+        <div id="govt" class="card bordered">
+          <div class="title">Govt Jobs</div>
+          <p>Quick access to government job notifications, application forms, and important links.</p>
+          <a class="cta" href="#">View Jobs</a>
+        </div>
+
+        <div id="cmkissan" class="card">
+          <div class="title">CM Kissan</div>
+          <p>CM Kissan &amp; subsidy status links and guides for farmers.</p>
+          <a class="cta" href="#">Check Status</a>
+        </div>
+
+        <div id="subhadra" class="card">
+          <div class="title">Subhadra Status</div>
+          <p>Section to show benefit status, payment dates, and application details.</p>
+          <a class="cta" href="#">Check Status</a>
+        </div>
+
+      </section>
+
+      <section style="margin-top:18px" class="card">
+        <div class="leader-wrap">
+          <div class="leader-photo" id="leaderPhoto"></div>
+          <div class="leader-content">
+            <h2 id="leaderName">Leader Name</h2>
+            <div class="meta">Village • Elected 2024 • Contact: +91-XXXXXXXXXX</div>
+            <div class="story">
+              <p><strong>Story:</strong> Brief biography of the leader goes here — childhood, service to the community, achievements, and a short message to residents. This area is styled to look like a card within the main card and readable on orange backgrounds.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <small>Template created with HTML &amp; CSS • Customize images and links to suit your site.</small>
+      </footer>
+
+    </div>
+  </main>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('toggle');
+    toggle.addEventListener('click', ()=>{
+      sidebar.classList.toggle('open');
+    });
+
+    // Optional: replace the leader photo and name dynamically
+    // Example: document.getElementById('leaderPhoto').style.backgroundImage = "url('path_to_image')";
+    // document.getElementById('leaderName').innerText = 'Sarat Gond';
+  </script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Animated Sidebar Navigation — Demo</title>
+  <style>
+    /* ---------- Reset & base ---------- */
+    :root{
+      --accent:#0ea5a4; /* teal */
+      --bg1:#081224;
+      --bg2:#0b1b2a;
+      --panel:#0f1724;
+      --muted:#9aa6b2;
+      --glass: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.06);
+      --radius: 14px;
+      --transition: 300ms cubic-bezier(.2,.9,.3,1);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#e6eef3;background:linear-gradient(120deg,var(--bg1),var(--bg2));}
+
+    /* ---------- animated background ---------- */
+    body::before{
+      content:'';position:fixed;inset:0;z-index:0;mix-blend-mode:overlay;opacity:0.9;
+      background: radial-gradient(600px 400px at 10% 20%, rgba(14,165,164,0.06), transparent),
+                  radial-gradient(500px 300px at 90% 80%, rgba(99,102,241,0.04), transparent);
+      animation: bgMove 12s linear infinite alternate;
+      pointer-events:none;
+    }
+    @keyframes bgMove{from{transform:scale(1) translateY(0)}to{transform:scale(1.07) translateY(-8px)}}
+
+    /* ---------- layout ---------- */
+    .app{position:relative;min-height:100vh;display:flex;gap:24px;padding:28px;align-items:flex-start;z-index:1}
+
+    /* Sidebar */
+    .sidebar{width:84px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:20px;padding:14px;box-shadow:0 6px 18px rgba(2,6,23,0.6);position:relative;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:12px}
+
+    /* vertical line / sider bar */
+    .sider-line{position:relative;width:6px;height:100%;border-radius:999px;background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.06));overflow:visible}
+    .sider-line::after{content:'';position:absolute;left:50%;transform:translateX(-50%);top:6px;bottom:6px;width:2px;border-radius:999px;background:linear-gradient(180deg,var(--accent),transparent);filter:blur(6px);opacity:0.9}
+
+    /* Toggle */
+    .toggle{position:relative;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;cursor:pointer}
+    .hamburger{width:22px;height:2px;background:var(--muted);position:relative;border-radius:2px;transition:var(--transition)}
+    .hamburger::before,.hamburger::after{content:'';position:absolute;left:0;height:2px;width:100%;background:var(--muted);border-radius:2px;transition:var(--transition)}
+    .hamburger::before{top:-7px}
+    .hamburger::after{top:7px}
+    .toggle.active .hamburger{background:transparent}
+    .toggle.active .hamburger::before{transform:translateY(7px) rotate(45deg);background:var(--accent)}
+    .toggle.active .hamburger::after{transform:translateY(-7px) rotate(-45deg);background:var(--accent)}
+
+    /* nav items */
+    nav{display:flex;flex-direction:column;gap:6px;align-items:center}
+    .nav-item{width:56px;height:56px;border-radius:12px;display:grid;place-items:center;cursor:pointer;position:relative;transition:var(--transition);border:1px solid var(--border);background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
+    .nav-item:hover{transform:translateX(6px);box-shadow:0 6px 18px rgba(2,6,23,0.35)}
+    .nav-item.active{background:linear-gradient(180deg, rgba(14,165,164,0.12), rgba(14,165,164,0.05));border-color:rgba(14,165,164,0.25)}
+    .nav-item .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+    .nav-item.active .dot{background:var(--accent);box-shadow:0 0 12px rgba(14,165,164,0.35)}
+
+    /* main content */
+    .main{flex:1;min-height:80vh;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--radius);padding:22px;border:1px solid var(--border);box-shadow:0 10px 30px rgba(2,6,23,0.5);display:flex;flex-direction:column;gap:18px}
+    .header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .title{font-size:20px;font-weight:700;letter-spacing:0.2px}
+    .subtitle{font-size:13px;color:var(--muted)}
+
+    /* page container & border page style */
+    .pages{display:grid;grid-template-columns:1fr;gap:18px}
+    .page{display:none;padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.006), rgba(255,255,255,0.01));border-radius:12px;border:2px dashed rgba(255,255,255,0.03)}
+    .page.active{display:block}
+
+    /* Register / Marriage card style */
+    .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .field{padding:10px;border-radius:8px;background:var(--glass);border:1px solid var(--border)}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#6366f1);color:#02111a;font-weight:700;text-decoration:none;border:none;cursor:pointer;transition:transform 200ms}
+    .btn:active{transform:translateY(1px)}
+
+    /* leader card */
+    .leader{display:flex;gap:16px;align-items:flex-start}
+    .leader img{width:140px;height:140px;border-radius:10px;object-fit:cover;border:3px solid rgba(255,255,255,0.04)}
+    .leader .meta{display:flex;flex-direction:column;gap:8px}
+    .leader .name{font-weight:800;font-size:18px}
+    .leader .story{color:var(--muted);line-height:1.45}
+
+    /* small screens */
+    @media (max-width:880px){
+      .app{padding:16px}
+      .sidebar{width:64px}
+      .leader img{width:110px;height:110px}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="Primary sidebar">
+      <div class="toggle" id="toggleBtn" title="Toggle menu" aria-pressed="false">
+        <span class="hamburger" aria-hidden="true"></span>
+      </div>
+
+      <div class="sider-line" aria-hidden="true">
+        <!-- left intentionally blank; decorative line -->
+      </div>
+
+      <nav role="navigation" aria-label="Main navigation">
+        <div class="nav-item active" data-target="home" title="Home" tabindex="0">
+          <div class="dot"></div>
+        </div>
+        <div class="nav-item" data-target="register" title="Register" tabindex="0">
+          <div class="dot"></div>
+        </div>
+        <div class="nav-item" data-target="marriage" title="Marriage Card" tabindex="0">
+          <div class="dot"></div>
+        </div>
+        <div class="nav-item" data-target="about" title="About" tabindex="0">
+          <div class="dot"></div>
+        </div>
+        <div class="nav-item" data-target="contact" title="Contact" tabindex="0">
+          <div class="dot"></div>
+        </div>
+        <div class="nav-item" data-target="extras" title="More / Links" tabindex="0">
+          <div class="dot"></div>
+        </div>
+      </nav>
+
+      <div style="flex:1"></div>
+      <div style="font-size:11px;color:var(--muted);text-align:center">v1.0</div>
+    </aside>
+
+    <main class="main">
+      <header class="header">
+        <div>
+          <div class="title">Animated Sidebar Demo</div>
+          <div class="subtitle">Toggle the sidebar & open pages — each panel has an "Open site" button.</div>
+        </div>
+        <div>
+          <button class="btn" id="openSiteBtn">Open active site</button>
+        </div>
+      </header>
+
+      <section class="pages">
+        <article id="home" class="page active">
+          <h3>Home</h3>
+          <p class="subtitle">Welcome to the demo home. Below is the leader profile in center.</p>
+
+          <div class="leader">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Leader photo">
+            <div class="meta">
+              <div class="name">Leader Name — Sarat Gond</div>
+              <div class="story">Sarat is a community leader known for social work and digital inclusion. This is a short story placeholder about his life, achievements and community projects. Use this space to paste real text.</div>
+              <div style="margin-top:8px">
+                <a class="btn" href="#" id="leaderMore">Read full story</a>
+              </div>
+            </div>
+          </div>
+
+        </article>
+
+        <article id="register" class="page">
+          <h3>Register</h3>
+          <p class="subtitle">A simple bordered registration panel (print-friendly).</p>
+          <div class="form-grid">
+            <div class="field"><label>Full name</label><br><input style="width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit"></div>
+            <div class="field"><label>Village</label><br><input style="width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit"></div>
+            <div class="field"><label>Phone</label><br><input style="width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit"></div>
+            <div class="field"><label>Date</label><br><input type="date" style="width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit"></div>
+          </div>
+          <div style="margin-top:12px"><button class="btn" id="downloadForm">Download form</button></div>
+        </article>
+
+        <article id="marriage" class="page">
+          <h3>Marriage Card</h3>
+          <p class="subtitle">Design preview for a marriage card — editable fields for names, venue and date.</p>
+          <div style="padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+              <div>
+                <div style="font-weight:800;font-size:18px">Simpul & Family</div>
+                <div style="color:var(--muted)">Village · Mandap · Ceremony time</div>
+              </div>
+              <div><button class="btn">Open card</button></div>
+            </div>
+          </div>
+        </article>
+
+        <article id="about" class="page">
+          <h3>About</h3>
+          <p class="subtitle">Describe the site, mission, or a brief about section.</p>
+          <p style="color:var(--muted)">This demo shows how to create an animated sidebar, line bar, toggle animation, and multiple page panels that are bordered and printable. Use these building blocks for a registration portal, marriage card generator, or community dashboard.</p>
+        </article>
+
+        <article id="contact" class="page">
+          <h3>Contact</h3>
+          <p class="subtitle">Contact & WhatsApp group links.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <a class="btn" href="https://wa.me/919000000000" target="_blank">Join WhatsApp group</a>
+            <a class="btn" href="mailto:example@example.com">Email</a>
+          </div>
+        </article>
+
+        <article id="extras" class="page">
+          <h3>Extras & External Links</h3>
+          <p class="subtitle">Quick links to YouTube, Govt jobs, CM Kisan, Subhadra status and more.</p>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+            <a class="btn" href="https://www.youtube.com/" target="_blank">YouTube Channel</a>
+            <a class="btn" href="https://www.ncs.gov.in/" target="_blank">Govt Jobs</a>
+            <a class="btn" href="https://cmkisan.gov.in/" target="_blank">CM Kisan</a>
+            <a class="btn" href="#" onclick="alert('Subhadra status: placeholder')">Subhadra status</a>
+          </div>
+        </article>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Basic interactivity: toggle + nav switching
+    const toggleBtn = document.getElementById('toggleBtn');
+    const sidebar = document.querySelector('.sidebar');
+    const navItems = document.querySelectorAll('.nav-item');
+    const pages = document.querySelectorAll('.page');
+    const openSiteBtn = document.getElementById('openSiteBtn');
+
+    toggleBtn.addEventListener('click', ()=>{
+      toggleBtn.classList.toggle('active');
+      const pressed = toggleBtn.classList.contains('active');
+      toggleBtn.setAttribute('aria-pressed', pressed);
+      // animate sidebar width
+      if(pressed){
+        sidebar.style.width = '220px';
+        document.querySelectorAll('.nav-item').forEach((n,i)=>{
+          n.style.width='100%';n.style.display='flex';n.style.justifyContent='flex-start';n.style.padding='0 12px';
+        });
+      } else {
+        sidebar.style.width = '';
+        document.querySelectorAll('.nav-item').forEach((n,i)=>{
+          n.style.width='56px';n.style.display='grid';n.style.justifyContent='center';n.style.padding='0';
+        });
+      }
+    });
+
+    function showPage(id){
+      pages.forEach(p=>p.classList.remove('active'));
+      const page = document.getElementById(id);
+      if(page) page.classList.add('active');
+      navItems.forEach(n=>n.classList.toggle('active', n.dataset.target===id));
+    }
+
+    navItems.forEach(item=>{
+      item.addEventListener('click', ()=> showPage(item.dataset.target));
+      item.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' ') { e.preventDefault(); showPage(item.dataset.target);} });
+    });
+
+    openSiteBtn.addEventListener('click', ()=>{
+      // open currently active page's "site" (demo uses anchors set in each panel)
+      const active = document.querySelector('.nav-item.active');
+      if(!active) return alert('Choose a page first');
+      const target = active.dataset.target;
+      // mapping to demo links
+      const map = {
+        home: 'https://example.com/home',
+        register: 'https://example.com/register',
+        marriage: 'https://example.com/marriage',
+        about: 'https://example.com/about',
+        contact: 'https://example.com/contact',
+        extras: 'https://example.com/extras'
+      }
+      window.open(map[target] || 'https://example.com', '_blank');
+    });
+
+    // Download form demo (simple text file)
+    document.getElementById('downloadForm').addEventListener('click', ()=>{
+      const text = 'Registration form (sample)\nName:\nVillage:\nPhone:\nDate:';
+      const blob = new Blob([text],{type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'registration_form.txt'; a.click(); URL.revokeObjectURL(url);
+    });
+
+    // leader more
+    document.getElementById('leaderMore').addEventListener('click',(e)=>{e.preventDefault(); alert('Full story placeholder — replace with real content.')});
+
+  </script>
+
+</body>
+</html>

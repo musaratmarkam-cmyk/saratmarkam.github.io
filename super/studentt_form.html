@@ -1,0 +1,59 @@
+<!-- student_form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Registration Form</title>
+<style>
+    body { font-family: Arial; background: #eef2f7; padding: 30px; }
+    .form-container { max-width: 600px; margin: auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    h2 { text-align: center; color: #333; }
+    label { display: block; margin-top: 15px; color: #555; }
+    input, select { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+    button { margin-top: 20px; padding: 12px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #45a049; }
+</style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Student Registration Form</h2>
+    <form id="studentForm" action="save_student.php" method="POST" enctype="multipart/form-data">
+        <label>Full Name</label>
+        <input type="text" name="fullname" required>
+
+        <label>Father's Name</label>
+        <input type="text" name="fathername" required>
+
+        <label>Village Name</label>
+        <input type="text" name="village" required>
+
+        <label>Phone Number</label>
+        <input type="tel" name="phone" required pattern="[0-9]{10}" placeholder="10-digit phone number">
+
+        <label>Class</label>
+        <select name="class" required>
+            <option value="">Select Class</option>
+            <option value="1">Class 1</option>
+            <option value="2">Class 2</option>
+            <option value="3">Class 3</option>
+            <option value="4">Class 4</option>
+            <option value="5">Class 5</option>
+            <option value="6">Class 6</option>
+            <option value="7">Class 7</option>
+            <option value="8">Class 8</option>
+        </select>
+
+        <label>Upload Passport Photo</label>
+        <input type="file" name="photo" accept="image/*" required>
+
+        <label>Upload Signature</label>
+        <input type="file" name="signature" accept="image/*" required>
+
+        <button type="submit">Submit & Download</button>
+    </form>
+</div>
+
+</body>
+</html>

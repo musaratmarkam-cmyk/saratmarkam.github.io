@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Sidebar</title>
+<style>
+    /* General Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        display: flex;
+        min-height: 100vh;
+        background-color: #f4f4f4;
+    }
+
+    /* Scroll Text Board */
+    .scroll-board {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background-color: #007BFF;
+        color: white;
+        padding: 10px 0;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .scroll-board span {
+        display: inline-block;
+        padding-left: 100%;
+        animation: scroll 15s linear infinite;
+    }
+
+    @keyframes scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-100%); }
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 250px;
+        background-color: #222;
+        color: white;
+        padding-top: 60px; /* for scroll board */
+        position: fixed;
+        height: 100%;
+        overflow-y: auto;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .sidebar a {
+        display: block;
+        color: white;
+        padding: 12px 20px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .sidebar a:hover {
+        background-color: #007BFF;
+    }
+
+    /* Sub-sections */
+    .sidebar .section {
+        font-weight: bold;
+        margin: 10px 0 5px 0;
+        padding-left: 20px;
+        font-size: 14px;
+        color: #ddd;
+    }
+
+    /* Main Content */
+    .main-content {
+        margin-left: 250px;
+        padding: 80px 20px 20px 20px;
+        width: calc(100% - 250px);
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .wallet {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .wallet button {
+        padding: 10px 20px;
+        background: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .wallet button:hover {
+        background: #0056b3;
+    }
+
+</style>
+</head>
+<body>
+
+<!-- Scroll Text Board -->
+<div class="scroll-board">
+    <span>Welcome to Your Dashboard - Manage All Services Easily - Wallet Balance Updated - Check News & Updates!</span>
+</div>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2>Dashboard</h2>
+    <div class="section">Wallet</div>
+    <a href="#">Wallet Balance</a>
+    <a href="#">Add Money</a>
+    <a href="#">Wallet History</a>
+
+    <div class="section">Services</div>
+    <a href="#">Birth Certificate</a>
+    <a href="#">Original Birth Certificate</a>
+    <a href="#">Adhar Manual</a>
+    <a href="#">Learning Licence</a>
+    <a href="#">PUC Certificate</a>
+    <a href="#">Land Seeding</a>
+
+    <div class="section">API Services</div>
+    <a href="#">Adhar Finger</a>
+    <a href="#">Adhar Find</a>
+    <a href="#">New PAN Apply</a>
+    <a href="#">PAN Find</a>
+    <a href="#">Bike Challan</a>
+    <a href="#">Voter Card</a>
+    <a href="#">Ration Card</a>
+    <a href="#">Ayushman Card</a>
+    <a href="#">DL Services</a>
+    <a href="#">RC Owner Book</a>
+
+    <div class="section">Web / News</div>
+    <a href="#">News</a>
+
+    <div class="section">Profile</div>
+    <a href="#">View Profile</a>
+    <a href="#">Edit Profile</a>
+    <a href="#">Logout</a>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="card wallet">
+        <div>
+            <h3>Your Wallet</h3>
+            <p>Name: John Doe</p>
+            <p>Balance: ₹500</p>
+        </div>
+        <button>Add Money</button>
+    </div>
+
+    <div class="card">
+        <h3>Service Charges</h3>
+        <ul>
+            <li>Birth Certificate: ₹50</li>
+            <li>Original Birth Certificate: ₹100</li>
+            <li>Adhar Manual: ₹30</li>
+            <li>Learning Licence: ₹200</li>
+            <li>PUC Certificate: ₹50</li>
+            <li>Land Seeding: ₹150</li>
+            <!-- Add others as needed -->
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>News Board</h3>
+        <p>Latest updates from government portals and your services.</p>
+    </div>
+</div>
+
+</body>
+</html>

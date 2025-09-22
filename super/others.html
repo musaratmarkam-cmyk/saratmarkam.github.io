@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Sidebar</title>
+<style>
+  /* General Reset */
+  * {margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif;}
+
+  body {
+    background: #f4f4f9;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    background: #2c3e50;
+    color: #fff;
+    transition: 0.3s;
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .sidebar h2 {
+    text-align: center;
+    padding: 20px 0;
+    background: #1a252f;
+  }
+
+  .sidebar ul {
+    list-style: none;
+  }
+
+  .sidebar ul li {
+    padding: 15px 20px;
+    border-bottom: 1px solid #1a252f;
+    cursor: pointer;
+  }
+
+  .sidebar ul li:hover {
+    background: #34495e;
+  }
+
+  .sidebar ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Main content */
+  .main-content {
+    margin-left: 250px;
+    padding: 20px;
+    flex: 1;
+  }
+
+  /* Scroll text at top */
+  .scrolling-text {
+    background: #e67e22;
+    color: #fff;
+    padding: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .scrolling-text p {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll 15s linear infinite;
+  }
+
+  @keyframes scroll {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
+
+  /* Wallet section */
+  .wallet {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .wallet h3 { margin-bottom: 10px; }
+  .wallet p { margin-bottom: 5px; }
+
+  /* Service cards */
+  .services {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    gap: 15px;
+  }
+
+  .service-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .service-card:hover {
+    background: #f39c12;
+    color: #fff;
+  }
+
+  /* Profile section */
+  .profile {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .profile a {
+    display: block;
+    margin-bottom: 10px;
+    color: #2c3e50;
+    text-decoration: none;
+  }
+
+  .profile a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Dashboard</h2>
+    <ul>
+      <li><a href="#">Wallet</a></li>
+      <li><a href="#">Wallet History</a></li>
+      <li><strong>Services</strong></li>
+      <li><a href="#">Birth Certificate</a></li>
+      <li><a href="#">Original Birth Certificate</a></li>
+      <li><a href="#">Aadhar Manual</a></li>
+      <li><a href="#">Learning Licence</a></li>
+      <li><a href="#">PUC Certificate</a></li>
+      <li><a href="#">Land Seeding</a></li>
+      <li><strong>API Services</strong></li>
+      <li><a href="#">Aadhar Finger</a></li>
+      <li><a href="#">Aadhar Find</a></li>
+      <li><a href="#">New PAN Apply</a></li>
+      <li><a href="#">PAN Find</a></li>
+      <li><a href="#">Bike Challan</a></li>
+      <li><a href="#">Voter Card</a></li>
+      <li><a href="#">Ration Card</a></li>
+      <li><a href="#">Aysuman Card</a></li>
+      <li><a href="#">DL Services</a></li>
+      <li><a href="#">RC Owner Book</a></li>
+      <li><a href="#">Website News</a></li>
+    </ul>
+    <div class="profile">
+      <strong>Profile</strong>
+      <a href="#">View Profile</a>
+      <a href="#">Edit Profile</a>
+      <a href="#">Logout</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Scrolling Text -->
+    <div class="scrolling-text">
+      <p>Welcome to the Dashboard! Check your wallet, use services, and stay updated with latest news!</p>
+    </div>
+
+    <!-- Wallet Section -->
+    <div class="wallet">
+      <h3>Wallet Balance</h3>
+      <p>Your Name: <strong>Sarat Gond</strong></p>
+      <p>Balance: <strong>₹5000</strong></p>
+      <button>Add Money</button>
+    </div>
+
+    <!-- Services Section -->
+    <h3>All Services</h3>
+    <div class="services">
+      <div class="service-card">Birth Certificate</div>
+      <div class="service-card">Original Birth Certificate</div>
+      <div class="service-card">Aadhar Manual</div>
+      <div class="service-card">Learning Licence</div>
+      <div class="service-card">PUC Certificate</div>
+      <div class="service-card">Land Seeding</div>
+      <div class="service-card">Aadhar Finger</div>
+      <div class="service-card">Aadhar Find</div>
+      <div class="service-card">New PAN Apply</div>
+      <div class="service-card">PAN Find</div>
+      <div class="service-card">Bike Challan</div>
+      <div class="service-card">Voter Card</div>
+      <div class="service-card">Ration Card</div>
+      <div class="service-card">Aysuman Card</div>
+      <div class="service-card">DL Services</div>
+      <div class="service-card">RC Owner Book</div>
+      <div class="service-card">Website News</div>
+    </div>
+  </div>
+
+</body>
+</html>
